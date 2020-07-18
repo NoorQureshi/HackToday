@@ -1,9 +1,3 @@
----
-description: >-
-  We now have a low-privileges shell that we want to escalate into a privileged
-  shell.
----
-
 # Windows Privilege Escalation
 
 Privilege escalation always comes down to proper enumeration. But to accomplish proper enumeration you need to know what to check and look for. This takes familiarity with systems that normally comes along with experience. At first privilege escalation can seem like a daunting task, but after a while, you start to filter through what is normal and what isn’t. It eventually becomes easier to know what to look for rather than digging through everything hoping to find that needle in the haystack. Hopefully, this guide will provide a good foundation to build upon and get you started.
