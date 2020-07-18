@@ -34,7 +34,7 @@ set
 Get-ChildItem Env: | ft Key,Value
 ```
 
-**Are there any other connected drives?**
+Are there any other connected drives?
 
 List ****all drives
 
@@ -66,7 +66,7 @@ Any interesting user privileges? _Note: The State column does not mean that the 
 whoami /priv
 ```
 
-**What users are on the system? Any old user profiles that weren’t cleaned up?**
+What users are on the system? Any old user profiles that weren’t cleaned up?
 
 ```text
 net users
@@ -87,13 +87,13 @@ List logon requirements; useable for brute-forcing
 net accounts
 ```
 
-**Is anyone else logged in?**
+Is anyone else logged in?
 
 ```text
 qwinsta
 ```
 
-**What groups are on the system?**
+What groups are on the system?
 
 ```text
 net localgroup
@@ -103,7 +103,7 @@ net localgroup
 Get-LocalGroup | ft Name
 ```
 
-**Are any of the users in the Administrator group?**
+Are any of the users in the Administrator group?
 
 ```text
 net localgroup Administrators
@@ -113,7 +113,7 @@ net localgroup Administrators
 Get-LocalGroupMember Administrators | ft Name, PrincipalSource
 ```
 
-**Anything in the Registry for User Autologin?**
+Anything in the Registry for User Autologin?
 
 ```text
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon" 2>nul | findstr "DefaultUserName DefaultDomainName DefaultPassword"
@@ -123,7 +123,7 @@ reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon" 2>nul | f
 Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WinLogon' | select "Default*"
 ```
 
-**Anything interesting in Credential Manager?**
+Anything interesting in Credential Manager?
 
 ```text
 cmdkey /list
@@ -136,7 +136,7 @@ Get-ChildItem -Hidden C:\Users\username\AppData\Local\Microsoft\Credentials\
 Get-ChildItem -Hidden C:\Users\username\AppData\Roaming\Microsoft\Credentials\
 ```
 
-**Can we access SAM and SYSTEM files?**
+Can we access SAM and SYSTEM files?
 
 ```text
 %SYSTEMROOT%\repair\SAM
@@ -224,7 +224,7 @@ whoami /priv
 
 ## Programs, Processes, and Services
 
-**What software is installed?**
+What software is installed?
 
 ```text
 dir /a "C:\Program Files"
@@ -238,9 +238,9 @@ Get-ChildItem 'C:\Program Files', 'C:\Program Files (x86)' | ft Parent,Name,Last
 Get-ChildItem -path Registry::HKEY_LOCAL_MACHINE\SOFTWARE | ft Name
 ```
 
-**Is there any weak folder or file permissions?**
+Is there any weak folder or file permissions?
 
-**Full Permissions for Everyone or Users on Program Folders?**
+Full Permissions for Everyone or Users on Program Folders?
 
 ```text
 icacls "C:\Program Files\*" 2>nul | findstr "(F)" | findstr "Everyone"
@@ -250,7 +250,7 @@ icacls "C:\Program Files\*" 2>nul | findstr "(F)" | findstr "BUILTIN\Users"
 icacls "C:\Program Files (x86)\*" 2>nul | findstr "(F)" | findstr "BUILTIN\Users" 
 ```
 
-**Modify Permissions for Everyone or Users on Program Folders?**
+Modify Permissions for Everyone or Users on Program Folders?
 
 ```text
 icacls "C:\Program Files\*" 2>nul | findstr "(M)" | findstr "Everyone"
@@ -274,7 +274,7 @@ accesschk.exe -qwsu "Authenticated Users" *
 accesschk.exe -qwsu "Users" *
 ```
 
-**What are the running processes/services on the system?** Is there an inside service not exposed? If so, can we open it? _See Port Forwarding in Appendix._
+What are the running processes/services on the system? Is there an inside service not exposed? If so, can we open it? _See Port Forwarding in Appendix._
 
 ```text
 tasklist /svc
@@ -296,7 +296,7 @@ _This one-liner returns the process owner without admin rights, if something is 
 Get-WmiObject -Query "Select * from Win32_Process" | where {$_.Name -notlike "svchost*"} | Select Name, Handle, @{Label="Owner";Expression={$_.GetOwner().User}} | ft -AutoSize
 ```
 
-**Any weak service permissions?** Can we reconfigure anything? Again, upload accesschk.
+Any weak service permissions? Can we reconfigure anything? Again, upload accesschk.
 
 ```text
 accesschk.exe -uwcqv "Everyone" *
@@ -304,7 +304,7 @@ accesschk.exe -uwcqv "Authenticated Users" *
 accesschk.exe -uwcqv "Users" *
 ```
 
-**Are there any unquoted service paths?**
+Are there any unquoted service paths?
 
 ```text
 wmic service get name,displayname,pathname,startmode 2>nul |findstr /i "Auto" 2>nul |findstr /i /v "C:\Windows\\" 2>nul |findstr /i /v """
@@ -314,7 +314,7 @@ wmic service get name,displayname,pathname,startmode 2>nul |findstr /i "Auto" 2>
 gwmi -class Win32_Service -Property Name, DisplayName, PathName, StartMode | Where {$_.StartMode -eq "Auto" -and $_.PathName -notlike "C:\Windows*" -and $_.PathName -notlike '"*'} | select PathName,DisplayName,Name
 ```
 
-**What scheduled tasks are there? Anything custom implemented?**
+What scheduled tasks are there? Anything custom implemented?
 
 ```text
 schtasks /query /fo LIST 2>nul | findstr TaskName
@@ -325,7 +325,7 @@ dir C:\windows\tasks
 Get-ScheduledTask | where {$_.TaskPath -notlike "\Microsoft*"} | ft TaskName,TaskPath,State
 ```
 
-**What is ran at startup?**
+What is ran at startup?
 
 ```text
 wmic startup get caption,command
@@ -366,7 +366,7 @@ Get-NetIPConfiguration | ft InterfaceAlias,InterfaceDescription,IPv4Address
 Get-DnsClientServerAddress -AddressFamily IPv4 | ft
 ```
 
-**What routes do we have?**
+What routes do we have?
 
 ```text
 route print
@@ -376,7 +376,7 @@ route print
 Get-NetRoute -AddressFamily IPv4 | ft DestinationPrefix,NextHop,RouteMetric,ifIndex
 ```
 
-**Anything in the ARP cache?**
+Anything in the ARP cache?
 
 ```text
 arp -a
@@ -386,19 +386,19 @@ arp -a
 Get-NetNeighbor -AddressFamily IPv4 | ft ifIndex,IPAddress,LinkLayerAddress,State
 ```
 
-**Are there connections to other hosts?**
+Are there connections to other hosts?
 
 ```text
 netstat -ano
 ```
 
-**Anything in the host's file?**
+Anything in the host's file?
 
 ```text
 C:\WINDOWS\System32\drivers\etc\hosts
 ```
 
-**Is the firewall turned on? If so what’s configured?**
+Is the firewall turned on? If so what’s configured?
 
 ```text
 netsh firewall show state
@@ -407,26 +407,26 @@ netsh advfirewall firewall show rule name=all
 netsh advfirewall export "firewall.txt"
 ```
 
-**Disable firewall**
+Disable firewall
 
 ```text
 netsh firewall set opmode disable
 netsh advfirewall set allprofiles state off
 ```
 
-**List all network shares**
+List all network shares
 
 ```text
 net share
 ```
 
-**Any other interesting interface configurations?**
+Any other interesting interface configurations?
 
 ```text
 netsh dump
 ```
 
-**Are there any SNMP configurations?** 
+Are there any SNMP configurations? 
 
 ```text
 reg query HKLM\SYSTEM\CurrentControlSet\Services\SNMP /s

@@ -12,7 +12,3 @@
 
 * [Command Injection](web-pentesting/command-injection.md)
 
----
-
-* [Untitled](untitled.md)
-
