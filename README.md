@@ -1,9 +1,3 @@
----
-description: >-
-  The Home of Hackers Is A Great Place For Learning Cyber Security and
-  Penetration Testing.
----
-
 # HackToday.net
 
 
