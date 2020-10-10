@@ -2,6 +2,10 @@
 
 * [HackToday.net](README.md)
 
+## Linux
+
+* [Checklist - Linux Privilege Escalation](linux/linux-privilege-escalation-checklist.md)
+
 ## Windows
 
 * [Windows Privilege Escalation](windows/windows-privilege-escalation/README.md)
