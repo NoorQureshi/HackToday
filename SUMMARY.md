@@ -16,3 +16,7 @@
 
 * [Command Injection](web-pentesting/command-injection.md)
 
+## Pentesting Cheatsheet
+
+* [Enumeration](pentesting-cheatsheet/enumeration.md)
+
